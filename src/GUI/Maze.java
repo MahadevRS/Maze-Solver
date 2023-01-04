@@ -34,7 +34,10 @@ public class Maze extends JFrame implements ActionListener,MouseListener{
         {1,1,1,1,1,1,1,1,1,1,1,1,1}
     };
 
+       
+    private int[] start={1,1};
     private int[] target ={8,11};
+    
     private List<Integer> path = new ArrayList<>();
     
     JButton submitbutton;
@@ -84,7 +87,12 @@ public class Maze extends JFrame implements ActionListener,MouseListener{
                g.drawRect(40*j, 20+40*i, 40, 40);
            }
            
-           for(int p=0;p<path.size();p+=2){
+           g.setColor(Color.BLUE);
+           g.fillRect(40*start[1], 40*start[0]+20, 40, 40);
+           g.setColor(Color.black);
+           g.drawRect(40*start[1], 40*start[0]+20, 40, 40);
+           
+           for(int p=0;p<path.size()-2;p+=2){
                int pathx=path.get(p);
                int pathy=path.get(p+1);
                g.setColor(Color.GREEN);
@@ -96,7 +104,7 @@ public class Maze extends JFrame implements ActionListener,MouseListener{
    public void actionPerformed(ActionEvent e){
        if(e.getSource()==submitbutton){
            try{
-               DFS.searchpath(maze,1,1,path);
+               DFS.searchpath(maze,start[0],start[1],path);
                this.repaint();
            }
            catch(Exception excp){
@@ -124,17 +132,7 @@ public class Maze extends JFrame implements ActionListener,MouseListener{
   
     @Override
    public void mouseClicked(MouseEvent e){
-       // try
-       path.clear();
-           for(int i=0;i<maze.length;i++){
-               for(int j=0;j<maze[0].length;j++){
-                   if(maze[i][j]==2){
-                       maze[i][j]=0;
-                   }
-               }
-           }
-       
-       // try
+
        if(e.getX()>=0 && e.getX()<=maze[0].length*40 && e.getY()>=20 && e.getY()<=maze.length*40+20){
            int row=(e.getY()-20)/40;
            int col=e.getX()/40;
@@ -143,29 +141,28 @@ public class Maze extends JFrame implements ActionListener,MouseListener{
            
            Graphics g=getGraphics();
            g.setColor(Color.WHITE);
+           g.fillRect(40*start[1], 40*start[0]+20, 40, 40);
+           g.setColor(Color.black);
+           g.drawRect(40*start[1], 40*start[0]+20, 40, 40);
+                    
+           g.setColor(Color.BLUE);
            g.fillRect(40*target[1], 40*target[0]+20, 40, 40);
+           g.setColor(Color.black);
+           g.drawRect(40*target[1], 40*target[0]+20, 40, 40);
+           start[0]=target[0];
+           start[1]=target[1];
+           
            g.setColor(Color.red);
            g.fillRect(col*40, row*40+20, 40, 40);
            maze[target[0]][target[1]]=0;
            maze[row][col]=9;
+           
            target[0]=row;
            target[1]=col;
        }
-       this.repaint();
        
-       // try
-       try{
-               DFS.searchpath(maze,1,1,path);
-               this.repaint();
-           }
-           catch(Exception excp){
-               JOptionPane.showMessageDialog(null, excp.toString());
-           }
-       
-       
-       //try
    }
-   
+  
    
    public static void main(String[] args){
        Maze gui=new Maze();

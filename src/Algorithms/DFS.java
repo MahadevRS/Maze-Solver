@@ -15,8 +15,8 @@ public class DFS {
         if(maze[x][y]==0){
             maze[x][y]=2;
             
-            int[] dx={1,0,-1,0};
-            int[] dy={0,-1,0,1};
+            int[] dx={0,0,-1,1};
+            int[] dy={1,-1,0,0};
             
             for(int d=0;d<4;d++){
                 int newx=x+dx[d];
